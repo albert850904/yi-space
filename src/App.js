@@ -1,4 +1,5 @@
 import CountryTable from "./container/CountryTable";
+import "./App.sass";
 
 function App() {
   return (
