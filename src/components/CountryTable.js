@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CountryTableRow from "./CountryTableRow";
 import SearchBar from "./SearchBar";
 import "./CountryTable.sass";
+import Spinner from "./UI/Spinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 const classNames = require("classnames");
@@ -10,13 +11,19 @@ const ASCENT = 1;
 const DECENT = 0;
 
 function CountryTable(props) {
-  const { countryInfoList, filterCountryHandler, getCountryInfoHandler } =
-    props;
+  const {
+    isWaiting,
+    setIsWaiting,
+    countryInfoList,
+    filterCountryHandler,
+    getCountryInfoHandler,
+  } = props;
   const [tablePage, setTablePage] = useState(0);
   const [sortDirection, setSortDireciton] = useState(DECENT);
   const [splitCountryList, setSplitCountryList] = useState(null);
 
   const sortCountryHandler = () => {
+    setIsWaiting(true);
     splitCountryList.sort((a, b) => {
       if (sortDirection) return a.name.localeCompare(b.name, "en");
       return b.name.localeCompare(a.name, "en");
@@ -24,8 +31,24 @@ function CountryTable(props) {
     setSplitCountryList(splitCountryList);
   };
 
+  const handleFilter = (text) => {
+    setTablePage(0);
+    filterCountryHandler(text);
+  };
+
+  useEffect(() => {
+    if (!isWaiting) return;
+    const timer = setTimeout(() => {
+      setIsWaiting(false);
+    }, 1000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isWaiting]);
+
   useEffect(() => {
     if (!Array.isArray(countryInfoList)) return;
+    setIsWaiting(true);
     setSplitCountryList(countryInfoList[tablePage]);
   }, [countryInfoList, tablePage]);
 
@@ -36,10 +59,7 @@ function CountryTable(props) {
 
   return (
     <>
-      <SearchBar
-        handleSearch={filterCountryHandler}
-        getAll={getCountryInfoHandler}
-      />
+      <SearchBar handleSearch={handleFilter} getAll={getCountryInfoHandler} />
       <table className="table-style">
         <thead>
           <tr>
@@ -97,6 +117,7 @@ function CountryTable(props) {
             );
           })}
       </ul>
+      <Spinner show={isWaiting} />
     </>
   );
 }
