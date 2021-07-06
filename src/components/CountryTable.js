@@ -1,21 +1,22 @@
 import CountryTableRow from "./CountryTableRow";
 import SearchBar from "./SearchBar";
+import "./CountryTable.sass";
 
 function CountryTable(props) {
   const { countryInfoList, filterCountryHandler } = props;
   return (
     <>
       <SearchBar handleSearch={filterCountryHandler} />
-      <table>
+      <table className="table-style">
         <thead>
           <tr>
-            <th>國旗 (flag)</th>
-            <th>國家名稱（name）</th>
-            <th>2位國家代碼(alpha2Code)</th>
-            <th>3位國家代碼(alpha3Code)</th>
-            <th>母語名稱(nativeName)</th>
-            <th>替代國家名稱(altSpellings)</th>
-            <th>國際電話區號(callingCodes)</th>
+            <th>國旗</th>
+            <th>國家名稱</th>
+            <th>2位國家代碼</th>
+            <th>3位國家代碼</th>
+            <th>母語名稱</th>
+            <th>替代國家名稱</th>
+            <th>國際電話區號</th>
           </tr>
         </thead>
         <tbody>

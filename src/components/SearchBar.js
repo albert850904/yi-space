@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import "./SearchBar.sass";
 
 function SearchBar(props) {
   const { handleSearch } = props;
@@ -16,7 +17,7 @@ function SearchBar(props) {
   };
 
   return (
-    <div>
+    <div className="searchbar-style">
       <form onSubmit={_handleSearch}>
         <input
           type="text"
@@ -26,7 +27,7 @@ function SearchBar(props) {
           ref={inputRef}
         />
         <button type="submit">搜尋</button>
-        {!!errorMsg && <div>{errorMsg}</div>}
+        {!!errorMsg && <div className="error-txt">{errorMsg}</div>}
       </form>
     </div>
   );
