@@ -1,14 +1,19 @@
+import { useEffect, useState } from "react";
 import CountryTableRow from "./CountryTableRow";
 import SearchBar from "./SearchBar";
 import "./CountryTable.sass";
-import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 const classNames = require("classnames");
+
+const ASCENT = 1;
+const DECENT = 0;
 
 function CountryTable(props) {
   const { countryInfoList, filterCountryHandler, getCountryInfoHandler } =
     props;
   const [tablePage, setTablePage] = useState(0);
-  const [sortDirection, setSortDireciton] = useState(false);
+  const [sortDirection, setSortDireciton] = useState(DECENT);
   const [splitCountryList, setSplitCountryList] = useState(null);
 
   const sortCountryHandler = () => {
@@ -40,10 +45,19 @@ function CountryTable(props) {
           <tr>
             <th>國旗</th>
             <th
-              onMouseDown={() => setSortDireciton((prevState) => !prevState)}
+              onMouseDown={() =>
+                setSortDireciton((prevState) =>
+                  prevState === DECENT ? ASCENT : DECENT
+                )
+              }
               className="clickable"
             >
               國家名稱
+              {sortDirection === ASCENT ? (
+                <FontAwesomeIcon icon={faChevronUp} />
+              ) : (
+                <FontAwesomeIcon icon={faChevronDown} />
+              )}
             </th>
             <th>2位國家代碼</th>
             <th>3位國家代碼</th>
