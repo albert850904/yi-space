@@ -6,4 +6,5 @@ axios.defaults.headers.common.Accept = "application/json";
 
 export const Country = {
   getCountryInfo: (body) => axios.get("/all", body),
+  filterCountryInfo: (params) => axios.get(`/name/${params}`),
 };

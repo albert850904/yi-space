@@ -18,11 +18,29 @@ function CountryTable() {
     }
   };
 
+  const filterCountryHandler = async (text) => {
+    try {
+      const result = await Country.filterCountryInfo(text);
+      const { data, status } = result;
+      if (status === 200) setCountryInfoList(data);
+    } catch (error) {
+      console.log(
+        "[container/CountryTable] filterCountryHandler error: ",
+        error
+      );
+    }
+  };
+
   useEffect(() => {
     getCountryInfoHandler();
   }, []);
 
-  return <CountryTableLayout countryInfoList={countryInfoList} />;
+  return (
+    <CountryTableLayout
+      countryInfoList={countryInfoList}
+      filterCountryHandler={filterCountryHandler}
+    />
+  );
 }
 
 export default CountryTable;
