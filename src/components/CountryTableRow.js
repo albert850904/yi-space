@@ -1,3 +1,4 @@
+import "./CountryTableRow.sass";
 function CountryTableRow(props) {
   const {
     flag,
@@ -11,7 +12,7 @@ function CountryTableRow(props) {
 
   return (
     <tr>
-      <td>
+      <td className="image-container">
         <img src={flag} alt={name} />
       </td>
       <td>{name}</td>
