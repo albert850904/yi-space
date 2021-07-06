@@ -1,8 +1,11 @@
-import logo from "./logo.svg";
-import "./App.css";
+import CountryTable from "./container/CountryTable";
 
 function App() {
-  return <div className="App"></div>;
+  return (
+    <div className="App">
+      <CountryTable />
+    </div>
+  );
 }
 
 export default App;
