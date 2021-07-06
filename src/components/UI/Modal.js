@@ -63,10 +63,12 @@ const modal = (props) => {
           </div>
           <div>
             <div>
-              <b>貨幣</b>: {info?.currencies[0]?.name}
+              <b>貨幣</b>:{" "}
+              {info && info.currencies[0] ? info.currencies[0].name : ""}
             </div>
             <div>
-              <b>語言</b>: {info?.languages[0]?.name}
+              <b>語言</b>:{" "}
+              {info && info.languages[0] ? info.languages[0].name : ""}
             </div>
           </div>
           <button className="Button" onClick={closed}>
