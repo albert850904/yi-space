@@ -4,7 +4,12 @@ import "./CountryTable.sass";
 import { useEffect, useState } from "react";
 
 function CountryTable(props) {
-  const { countryInfoList, setCountryInfoList, filterCountryHandler } = props;
+  const {
+    countryInfoList,
+    setCountryInfoList,
+    filterCountryHandler,
+    getCountryInfoHandler,
+  } = props;
   const [sortDirection, setSortDireciton] = useState(false);
 
   const sortCountryHandler = () => {
@@ -22,7 +27,10 @@ function CountryTable(props) {
 
   return (
     <>
-      <SearchBar handleSearch={filterCountryHandler} />
+      <SearchBar
+        handleSearch={filterCountryHandler}
+        getAll={getCountryInfoHandler}
+      />
       <table className="table-style">
         <thead>
           <tr>

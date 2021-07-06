@@ -39,6 +39,7 @@ function CountryTable() {
     <CountryTableLayout
       countryInfoList={countryInfoList}
       setCountryInfoList={setCountryInfoList}
+      getCountryInfoHandler={getCountryInfoHandler}
       filterCountryHandler={filterCountryHandler}
     />
   );
