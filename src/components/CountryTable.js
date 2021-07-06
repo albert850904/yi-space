@@ -1,9 +1,25 @@
 import CountryTableRow from "./CountryTableRow";
 import SearchBar from "./SearchBar";
 import "./CountryTable.sass";
+import { useEffect, useState } from "react";
 
 function CountryTable(props) {
-  const { countryInfoList, filterCountryHandler } = props;
+  const { countryInfoList, setCountryInfoList, filterCountryHandler } = props;
+  const [sortDirection, setSortDireciton] = useState(false);
+
+  const sortCountryHandler = () => {
+    if (!Array.isArray(countryInfoList)) return;
+    countryInfoList.sort((a, b) => {
+      if (sortDirection) return a.name.localeCompare(b.name, "en");
+      return b.name.localeCompare(a.name, "en");
+    });
+    setCountryInfoList(countryInfoList);
+  };
+
+  useEffect(() => {
+    sortCountryHandler();
+  }, [sortDirection]);
+
   return (
     <>
       <SearchBar handleSearch={filterCountryHandler} />
@@ -11,7 +27,9 @@ function CountryTable(props) {
         <thead>
           <tr>
             <th>國旗</th>
-            <th>國家名稱</th>
+            <th onMouseDown={() => setSortDireciton((prevState) => !prevState)}>
+              國家名稱
+            </th>
             <th>2位國家代碼</th>
             <th>3位國家代碼</th>
             <th>母語名稱</th>
@@ -21,9 +39,10 @@ function CountryTable(props) {
         </thead>
         <tbody>
           {Array.isArray(countryInfoList) &&
-            countryInfoList.map((country) => {
+            countryInfoList.map((country, index) => {
               return (
                 <CountryTableRow
+                  key={`${country.flag}-${index}`}
                   flag={country.flag}
                   name={country.name}
                   alpha2Code={country.alpha2Code}
