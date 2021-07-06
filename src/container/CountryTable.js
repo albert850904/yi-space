@@ -31,7 +31,7 @@ function CountryTable() {
     try {
       const result = await Country.filterCountryInfo(text);
       const { data, status } = result;
-      if (status === 200) setCountryInfoList(data);
+      if (status === 200) splitArrayHandler(data);
     } catch (error) {
       console.log(
         "[container/CountryTable] filterCountryHandler error: ",

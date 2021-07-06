@@ -1,32 +1,38 @@
+import { useEffect, useState } from "react";
 import CountryTableRow from "./CountryTableRow";
 import SearchBar from "./SearchBar";
 import "./CountryTable.sass";
-import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 const classNames = require("classnames");
 
+const ASCENT = 1;
+const DECENT = 0;
+
 function CountryTable(props) {
-  const {
-    countryInfoList,
-    setCountryInfoList,
-    filterCountryHandler,
-    getCountryInfoHandler,
-  } = props;
+  const { countryInfoList, filterCountryHandler, getCountryInfoHandler } =
+    props;
   const [tablePage, setTablePage] = useState(0);
-  const [sortDirection, setSortDireciton] = useState(false);
+  const [sortDirection, setSortDireciton] = useState(DECENT);
+  const [splitCountryList, setSplitCountryList] = useState(null);
 
   const sortCountryHandler = () => {
-    if (!Array.isArray(countryInfoList)) return;
-    console.log("countryInfoList", countryInfoList);
-    countryInfoList.sort((a, b) => {
-      if (sortDirection) return a.name?.localeCompare(b.name, "en");
-      return b.name?.localeCompare(a.name, "en");
+    splitCountryList.sort((a, b) => {
+      if (sortDirection) return a.name.localeCompare(b.name, "en");
+      return b.name.localeCompare(a.name, "en");
     });
-    setCountryInfoList(countryInfoList);
+    setSplitCountryList(splitCountryList);
   };
 
   useEffect(() => {
+    if (!Array.isArray(countryInfoList)) return;
+    setSplitCountryList(countryInfoList[tablePage]);
+  }, [countryInfoList, tablePage]);
+
+  useEffect(() => {
+    if (!Array.isArray(splitCountryList)) return;
     sortCountryHandler();
-  }, [sortDirection]);
+  }, [sortDirection, splitCountryList]);
 
   return (
     <>
@@ -38,8 +44,20 @@ function CountryTable(props) {
         <thead>
           <tr>
             <th>國旗</th>
-            <th onMouseDown={() => setSortDireciton((prevState) => !prevState)}>
+            <th
+              onMouseDown={() =>
+                setSortDireciton((prevState) =>
+                  prevState === DECENT ? ASCENT : DECENT
+                )
+              }
+              className="clickable"
+            >
               國家名稱
+              {sortDirection === ASCENT ? (
+                <FontAwesomeIcon icon={faChevronUp} />
+              ) : (
+                <FontAwesomeIcon icon={faChevronDown} />
+              )}
             </th>
             <th>2位國家代碼</th>
             <th>3位國家代碼</th>
@@ -49,9 +67,8 @@ function CountryTable(props) {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(countryInfoList) &&
-            Array.isArray(countryInfoList[tablePage]) &&
-            countryInfoList[tablePage].map((country, index) => {
+          {Array.isArray(splitCountryList) &&
+            splitCountryList.map((country, index) => {
               return (
                 <CountryTableRow
                   key={`${country.flag}-${index}`}
