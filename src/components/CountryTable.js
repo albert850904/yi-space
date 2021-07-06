@@ -2,16 +2,24 @@ import CountryTableRow from "./CountryTableRow";
 import SearchBar from "./SearchBar";
 import "./CountryTable.sass";
 import { useEffect, useState } from "react";
+const classNames = require("classnames");
 
 function CountryTable(props) {
-  const { countryInfoList, setCountryInfoList, filterCountryHandler } = props;
+  const {
+    countryInfoList,
+    setCountryInfoList,
+    filterCountryHandler,
+    getCountryInfoHandler,
+  } = props;
+  const [tablePage, setTablePage] = useState(0);
   const [sortDirection, setSortDireciton] = useState(false);
 
   const sortCountryHandler = () => {
     if (!Array.isArray(countryInfoList)) return;
+    console.log("countryInfoList", countryInfoList);
     countryInfoList.sort((a, b) => {
-      if (sortDirection) return a.name.localeCompare(b.name, "en");
-      return b.name.localeCompare(a.name, "en");
+      if (sortDirection) return a.name?.localeCompare(b.name, "en");
+      return b.name?.localeCompare(a.name, "en");
     });
     setCountryInfoList(countryInfoList);
   };
@@ -22,7 +30,10 @@ function CountryTable(props) {
 
   return (
     <>
-      <SearchBar handleSearch={filterCountryHandler} />
+      <SearchBar
+        handleSearch={filterCountryHandler}
+        getAll={getCountryInfoHandler}
+      />
       <table className="table-style">
         <thead>
           <tr>
@@ -39,7 +50,8 @@ function CountryTable(props) {
         </thead>
         <tbody>
           {Array.isArray(countryInfoList) &&
-            countryInfoList.map((country, index) => {
+            Array.isArray(countryInfoList[tablePage]) &&
+            countryInfoList[tablePage].map((country, index) => {
               return (
                 <CountryTableRow
                   key={`${country.flag}-${index}`}
@@ -55,6 +67,19 @@ function CountryTable(props) {
             })}
         </tbody>
       </table>
+      <ul className="pages">
+        {Array.isArray(countryInfoList) &&
+          Object.keys(countryInfoList)?.map((item) => {
+            return (
+              <li
+                onClick={() => setTablePage(Number(item))}
+                className={classNames(tablePage === Number(item) && "selected")}
+              >
+                {Number(item) + 1}
+              </li>
+            );
+          })}
+      </ul>
     </>
   );
 }
