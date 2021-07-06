@@ -3,6 +3,7 @@ import CountryTableLayout from "../components/CountryTable";
 import { Country } from "../lib/agents";
 
 function CountryTable() {
+  const [isWaiting, setIsWaiting] = useState(false);
   const [countryInfoList, setCountryInfoList] = useState([]);
 
   const splitArrayHandler = (data) => {
@@ -12,9 +13,11 @@ function CountryTable() {
       tempArray.push(arr);
     }
     setCountryInfoList(tempArray);
+    setIsWaiting(false);
   };
 
   const getCountryInfoHandler = async () => {
+    setIsWaiting(true);
     try {
       const result = await Country.getCountryInfo();
       const { data, status } = result;
@@ -24,10 +27,12 @@ function CountryTable() {
         "[container/CountryTable] getCountryInfoHandler error: ",
         error
       );
+      setIsWaiting(false);
     }
   };
 
   const filterCountryHandler = async (text) => {
+    setIsWaiting(true);
     try {
       const result = await Country.filterCountryInfo(text);
       const { data, status } = result;
@@ -37,6 +42,7 @@ function CountryTable() {
         "[container/CountryTable] filterCountryHandler error: ",
         error
       );
+      setIsWaiting(false);
     }
   };
 
@@ -46,6 +52,8 @@ function CountryTable() {
 
   return (
     <CountryTableLayout
+      isWaiting={isWaiting}
+      setIsWaiting={setIsWaiting}
       countryInfoList={countryInfoList}
       setCountryInfoList={setCountryInfoList}
       getCountryInfoHandler={getCountryInfoHandler}
