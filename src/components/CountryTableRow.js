@@ -8,10 +8,11 @@ function CountryTableRow(props) {
     nativeName,
     altSpellings,
     callingCodes,
+    onPressCountry,
   } = props;
 
   return (
-    <tr>
+    <tr onClick={() => onPressCountry(name)}>
       <td className="image-container">
         <img src={flag} alt={name} />
       </td>

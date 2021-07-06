@@ -3,6 +3,7 @@ import CountryTableRow from "./CountryTableRow";
 import SearchBar from "./SearchBar";
 import "./CountryTable.sass";
 import Spinner from "./UI/Spinner";
+import Modal from "./UI/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 const classNames = require("classnames");
@@ -18,6 +19,8 @@ function CountryTable(props) {
     filterCountryHandler,
     getCountryInfoHandler,
   } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(false);
   const [tablePage, setTablePage] = useState(0);
   const [sortDirection, setSortDireciton] = useState(DECENT);
   const [splitCountryList, setSplitCountryList] = useState(null);
@@ -34,6 +37,16 @@ function CountryTable(props) {
   const handleFilter = (text) => {
     setTablePage(0);
     filterCountryHandler(text);
+  };
+
+  const modalOpenHandler = (name) => {
+    let chosenCountry;
+    for (const section of countryInfoList) {
+      const temp = section.find((country) => country.name === name);
+      if (temp) chosenCountry = temp;
+    }
+    setSelectedCountry(chosenCountry);
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -99,6 +112,7 @@ function CountryTable(props) {
                   nativeName={country.nativeName}
                   altSpellings={country.altSpellings}
                   callingCodes={country.callingCodes}
+                  onPressCountry={modalOpenHandler}
                 />
               );
             })}
@@ -117,6 +131,11 @@ function CountryTable(props) {
             );
           })}
       </ul>
+      <Modal
+        show={isModalOpen}
+        closed={() => setIsModalOpen(false)}
+        info={selectedCountry}
+      />
       <Spinner show={isWaiting} />
     </>
   );
