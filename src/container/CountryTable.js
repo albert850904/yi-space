@@ -21,7 +21,12 @@ function CountryTable() {
     try {
       const result = await Country.getCountryInfo();
       const { data, status } = result;
-      if (status === 200) splitArrayHandler(data);
+      if (status === 200) {
+        const sortedData = data.sort((a, b) => {
+          return a.name.localeCompare(b.name, "en");
+        });
+        splitArrayHandler(sortedData);
+      }
     } catch (error) {
       console.log(
         "[container/CountryTable] getCountryInfoHandler error: ",

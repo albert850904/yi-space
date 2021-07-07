@@ -28,7 +28,7 @@ function CountryTable(props) {
   const sortCountryHandler = () => {
     setIsWaiting(true);
     splitCountryList.sort((a, b) => {
-      if (sortDirection) return a.name.localeCompare(b.name, "en");
+      if (sortDirection === DECENT) return a.name.localeCompare(b.name, "en");
       return b.name.localeCompare(a.name, "en");
     });
     setSplitCountryList(splitCountryList);
